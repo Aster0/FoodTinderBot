@@ -3,9 +3,13 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import javax.validation.constraints.Null;
+
 public class FoodTinderBotMain {
 
     public static void main(String[] args) {
+
+
 
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
@@ -13,5 +17,9 @@ public class FoodTinderBotMain {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
+
+
+
     }
 }

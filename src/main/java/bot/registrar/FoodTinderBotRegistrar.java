@@ -25,8 +25,11 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
 
 
+
+
         for(ICommand command : commands) {
-            command.onCommandReceived(update);
+            System.out.println("Finding");
+            command.onCommandReceived(update, this);
         }
 
     }
@@ -37,6 +40,6 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return RedactedClass.getBotToken();
+        return RedactedClass.BOT_TOKEN;
     }
 }
