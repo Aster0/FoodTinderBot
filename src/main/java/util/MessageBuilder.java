@@ -47,17 +47,23 @@ public class MessageBuilder {
 
 
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        List<InlineKeyboardButton> row1 = new ArrayList<InlineKeyboardButton>();
+        List<InlineKeyboardButton> row1;
+
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         for(InlineKeyboardButton button : buttons) {
+
+            row1 = new ArrayList<>();
             button.setCallbackData(button.getText());
+            System.out.println(button.getText());
             row1.add(button);
+
+            rows.add(row1);
         }
 
 
-        rows.add(row1);
+
 
         inlineKeyboardMarkup.setKeyboard(rows);
         // Add it to the message

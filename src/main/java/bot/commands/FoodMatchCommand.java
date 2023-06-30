@@ -43,7 +43,7 @@ public class FoodMatchCommand implements ICommand {
                 default: {
                     System.out.println("not ok");
                     sessionData.currentMessageAcceptedCount++;
-                    
+
                 }
 
             }
