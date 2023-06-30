@@ -9,6 +9,8 @@ public class SessionData {
 
     private static List<SessionData> sessions;
 
+    private List<String> usernames = new ArrayList<>();
+
 
 
     public int currentMessageId = 0;
@@ -24,6 +26,11 @@ public class SessionData {
     private void resetCount() {
         currentMessageCount = 0;
         currentMessageAcceptedCount = 0;
+        usernames.clear();
+    }
+
+    public List<String> getUsernames() {
+        return usernames;
     }
 
     public static void storeSession(int messageId) {

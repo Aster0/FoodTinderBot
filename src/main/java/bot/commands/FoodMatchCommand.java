@@ -20,16 +20,20 @@ public class FoodMatchCommand implements ICommand {
 
         if(update.getCallbackQuery() != null) {
 
-            System.out.println(update.getCallbackQuery().getMessage().getChatId() + " MESSAGE ID!");
+            System.out.println(update.getCallbackQuery().getFrom().getFirstName() + " MESSAGE ID!");
             SessionData sessionData = SessionData.findSession(update.getCallbackQuery().getMessage().getMessageId());
 
 
 
+            if(sessionData.currentMessageCount == 2 ||
+                    sessionData.getUsernames().contains(update.getCallbackQuery().getFrom().getFirstName()))
+                return;
 
             sessionData.currentMessageCount++;
 
             System.out.println(sessionData.currentMessageId + " SESSION DATA");
 
+            sessionData.getUsernames().add(update.getCallbackQuery().getFrom().getFirstName());
 
             switch(update.getCallbackQuery().getData()) {
                 case "Yes": {
