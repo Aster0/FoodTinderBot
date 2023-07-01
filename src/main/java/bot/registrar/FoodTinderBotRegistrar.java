@@ -16,15 +16,7 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
 
 
-    private FoodData[] listOfFood = {
-            new FoodData("Chicken Wings",
-                    "https://preppykitchen.com/wp-content/uploads/2022/09/Chicken-Wings-Recipe-Card.jpg"),
-            new FoodData("Saizeriya",
-                    "https://burpple-3.imgix.net/foods/1660045160_review_image1947389_original.?w=645&dpr=1&fit=crop&q=80&auto=format"),
 
-
-
-    };
     private List<ICommand> commands = new ArrayList<>();
     public FoodTinderBotRegistrar() {
 
@@ -40,7 +32,7 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
 
         for(ICommand command : commands) {
-            System.out.println("Finding");
+
             command.onCommandReceived(update, this);
         }
 
