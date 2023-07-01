@@ -30,6 +30,13 @@ public class FoodMatchCommand implements ICommand {
         if(update.getCallbackQuery() != null) {
 
 
+            if(update.getCallbackQuery().getData().equals("Continue")) {
+                System.out.println("CONTINUE!!!");
+                generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot);
+
+                return;
+            }
+
             SessionData sessionData = SessionData.findSessionByMessageId(
                     update.getCallbackQuery().getMessage().getMessageId());
 
@@ -52,26 +59,43 @@ public class FoodMatchCommand implements ICommand {
 
             sessionData.getUsernames().add(update.getCallbackQuery().getFrom().getFirstName());
 
+            messageBuilder.editMessage(DEFAULT_FOOD_MESSAGE.replace("%count%",
+                            String.valueOf(sessionData.currentMessageCount)).replace("%foodname%", sessionData.currentFoodData.getName()),
+                    update.getCallbackQuery().getMessage().getMessageId(),
+                    update.getCallbackQuery().getMessage().getChatId(), telegramBot, sessionData);
+
             switch(update.getCallbackQuery().getData()) {
                 case "Yes": {
-
-                    break;
-                }
-                default: {
 
                     sessionData.currentMessageAcceptedCount++;
 
                     if(sessionData.currentMessageAcceptedCount == 2) { // it's a match!
 
+                        try {
+                            telegramBot.execute(new MessageBuilder<SendPhoto>(
+                                    "💖 It's a match for "
+                                            + sessionData.currentFoodData.getName() +
+                                            "!\nIf you wish to continue to explore more, " +
+                                            "click \"Continue\"."
+                                           ,
+                                    "https://cdn.dribbble.com/users/485616/screenshots/6022245/heart_icon.gif",
+                                    update.getCallbackQuery().getMessage().getChatId(),
+                                    new InlineKeyboardButton("Continue")).build());
 
+
+
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+
+                        return; // pause here for the user to decide to continue or not.
                     }
+
+                    break;
                 }
             }
 
-            messageBuilder.editMessage(DEFAULT_FOOD_MESSAGE.replace("%count%",
-                    String.valueOf(sessionData.currentMessageCount)).replace("%foodname%", sessionData.currentFoodData.getName()),
-                    update.getCallbackQuery().getMessage().getMessageId(),
-                    update.getCallbackQuery().getMessage().getChatId(), telegramBot, sessionData);
+
 
             if(sessionData.currentMessageCount == 2)
                 generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot);
@@ -93,16 +117,17 @@ public class FoodMatchCommand implements ICommand {
             sessionData = SessionData.storeSession(chatId);
 
 
-        System.out.println(sessionData);
+
         FoodData foodData = sessionData.chooseRandomFood(listOfFood);
 
-        System.out.println(foodData);
+
 
         if(foodData == null) {
 
-            System.out.println("YES NULL");
+
             try {
-                telegramBot.execute(new MessageBuilder<SendMessage>("We have come to the end of the food list.", chatId).build());
+                telegramBot.execute(new MessageBuilder<SendMessage>(
+                        "We have come to the end of the food list.", chatId).build());
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }

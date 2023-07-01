@@ -52,7 +52,7 @@ public class MessageBuilder<E> {
 
             row1 = new ArrayList<>();
             button.setCallbackData(button.getText());
-            System.out.println(button.getText());
+
             row1.add(button);
 
             rows.add(row1);
