@@ -19,6 +19,7 @@ public class SessionData {
 
 
     public int currentMessageId = 0;
+    public boolean sessionStarted;
     public long chatId = 0;
 
     public int currentMessageCount = 0, currentMessageAcceptedCount = 0;
@@ -102,6 +103,18 @@ public class SessionData {
         return sessionData;
 
 
+
+    }
+
+    public static void deleteSession(SessionData sessionData) {
+
+        for(int i = 0; i < sessions.size(); i++) {
+
+            if(sessions.get(i) == sessionData) {
+                sessions.remove(i);
+                break;
+            }
+        }
 
     }
 

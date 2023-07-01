@@ -13,7 +13,10 @@ import util.MessageBuilder;
 
 public class FoodMatchCommand implements ICommand {
 
-    private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n⌚ %count%/2 have answered";
+    private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n⌚ %count%/2 have answered",
+            MATCHED_FOOD_MESSAGE = "💖 It's a match for %foodname%"+
+                    "!\n\nIf you wish to continue to explore more, " +
+                    "click \"Continue\".";
     private Message message;
     private MessageBuilder messageBuilder;
 
@@ -32,7 +35,7 @@ public class FoodMatchCommand implements ICommand {
 
             if(update.getCallbackQuery().getData().equals("Continue")) {
                 System.out.println("CONTINUE!!!");
-                generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot);
+                generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot, false);
 
                 return;
             }
@@ -60,7 +63,8 @@ public class FoodMatchCommand implements ICommand {
             sessionData.getUsernames().add(update.getCallbackQuery().getFrom().getFirstName());
 
             messageBuilder.editMessage(DEFAULT_FOOD_MESSAGE.replace("%count%",
-                            String.valueOf(sessionData.currentMessageCount)).replace("%foodname%", sessionData.currentFoodData.getName()),
+                            String.valueOf(sessionData.currentMessageCount)).replace(
+                                    "%foodname%", sessionData.currentFoodData.getName()),
                     update.getCallbackQuery().getMessage().getMessageId(),
                     update.getCallbackQuery().getMessage().getChatId(), telegramBot, sessionData);
 
@@ -73,11 +77,8 @@ public class FoodMatchCommand implements ICommand {
 
                         try {
                             telegramBot.execute(new MessageBuilder<SendPhoto>(
-                                    "💖 It's a match for "
-                                            + sessionData.currentFoodData.getName() +
-                                            "!\nIf you wish to continue to explore more, " +
-                                            "click \"Continue\"."
-                                           ,
+                                    MATCHED_FOOD_MESSAGE.replace("%foodname%",
+                                            sessionData.currentFoodData.getName()),
                                     "https://cdn.dribbble.com/users/485616/screenshots/6022245/heart_icon.gif",
                                     update.getCallbackQuery().getMessage().getChatId(),
                                     new InlineKeyboardButton("Continue")).build());
@@ -98,23 +99,41 @@ public class FoodMatchCommand implements ICommand {
 
 
             if(sessionData.currentMessageCount == 2)
-                generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot);
+                generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot, false);
 
             return;
         }
 
-        generateFoodChoice(update.getMessage().getChatId(), telegramBot);
+
+        generateFoodChoice(update.getMessage().getChatId(), telegramBot, true);
 
     }
 
-    private void generateFoodChoice(long chatId, TelegramLongPollingBot telegramBot) {
+    private void generateFoodChoice(long chatId, TelegramLongPollingBot telegramBot, boolean checkIfStarted) {
 
 
         SessionData sessionData = SessionData.findSessionByChatId(chatId);
 
 
-        if(sessionData == null)
+        if(checkIfStarted) {
+
+            System.out.println(sessionData);
+            if(sessionData != null && sessionData.sessionStarted) {
+                return;
+            }
+
+        }
+
+
+
+        if(sessionData == null) {
             sessionData = SessionData.storeSession(chatId);
+            sessionData.sessionStarted = true;
+        }
+
+
+
+
 
 
 
@@ -128,6 +147,8 @@ public class FoodMatchCommand implements ICommand {
             try {
                 telegramBot.execute(new MessageBuilder<SendMessage>(
                         "We have come to the end of the food list.", chatId).build());
+
+                SessionData.deleteSession(sessionData);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
