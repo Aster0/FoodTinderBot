@@ -18,7 +18,7 @@ public class FoodMatchCommand implements ICommand {
                     "!\n\nIf you wish to continue to explore more, " +
                     "click \"Continue\".";
     private Message message;
-    private MessageBuilder messageBuilder;
+    private MessageBuilder<SendPhoto> messageBuilder;
 
     private FoodData[] listOfFood = {
             new FoodData("Chicken Wings",
@@ -164,7 +164,7 @@ public class FoodMatchCommand implements ICommand {
                 chatId, new InlineKeyboardButton("Yes"),
                 new InlineKeyboardButton("No"));
 
-        SendPhoto sendMessage = (SendPhoto) messageBuilder.build();
+        SendPhoto sendMessage = messageBuilder.build();
 
         try {
             message = telegramBot.execute(sendMessage);
