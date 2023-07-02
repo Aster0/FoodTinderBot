@@ -159,7 +159,7 @@ public class FoodMatchCommand implements ICommand {
 
 
 
-        messageBuilder = new MessageBuilder<SendPhoto>(DEFAULT_FOOD_MESSAGE.replace("%count%",
+        messageBuilder = new MessageBuilder(DEFAULT_FOOD_MESSAGE.replace("%count%",
                 "0").replace("%foodname%", foodData.getName()), foodData.getThumbnail(),
                 chatId, new InlineKeyboardButton("Yes"),
                 new InlineKeyboardButton("No"));
