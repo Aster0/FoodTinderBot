@@ -45,17 +45,23 @@ public class CommandFactory {
 
         String commandExecuted = commandPrefix;
 
-        if(commandPrefix.equals("/start"))
-            commandExecuted = COMMANDS.START.getCommandPrefix();
-        else if(commandPrefix.equals("/test"))
-            commandExecuted = COMMANDS.TEST.getCommandPrefix();
+
+        if(commandPrefix.startsWith("/")) // is a command
+            commandExecuted = COMMANDS.valueOf(commandPrefix.replace("/", "").toUpperCase()).getCommandPrefix();
+
+
+
+//        if(commandPrefix.equals("/start"))
+//            commandExecuted = COMMANDS.START.getCommandPrefix();
+//        else if(commandPrefix.equals("/test"))
+//            commandExecuted = COMMANDS.TEST.getCommandPrefix();
 
 
 
         ICommand command = commandExecuted != null
                 ? commands.get(commandExecuted) : null;
 
-        System.out.println(commands.get(commandExecuted));
+        System.out.println(command);
 
 
 
