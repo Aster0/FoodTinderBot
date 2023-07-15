@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import util.MessageBuilder;
 
-public class FoodMatchCommand extends AbstractCommand {
+public class FoodMatchCommand extends Command {
 
     private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n⌚ %count%/2 have answered",
             MATCHED_FOOD_MESSAGE = "💖 It's a match for %foodname%"+
