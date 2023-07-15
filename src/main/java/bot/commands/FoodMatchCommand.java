@@ -81,7 +81,7 @@ public class FoodMatchCommand implements ICommand {
                                             sessionData.currentFoodData.getName()),
                                     "https://cdn.dribbble.com/users/485616/screenshots/6022245/heart_icon.gif",
                                     update.getCallbackQuery().getMessage().getChatId(),
-                                    "matching-start",
+                                    CommandFactory.COMMANDS.START.getCommandPrefix(),
                                     new InlineKeyboardButton("Continue")).build());
 
 
@@ -162,7 +162,7 @@ public class FoodMatchCommand implements ICommand {
 
         messageBuilder = new MessageBuilder(DEFAULT_FOOD_MESSAGE.replace("%count%",
                 "0").replace("%foodname%", foodData.getName()), foodData.getThumbnail(),
-                chatId, "matching-start", new InlineKeyboardButton("Yes"),
+                chatId, CommandFactory.COMMANDS.START.getCommandPrefix(), new InlineKeyboardButton("Yes"),
                 new InlineKeyboardButton("No"));
 
         SendPhoto sendMessage = messageBuilder.build();
