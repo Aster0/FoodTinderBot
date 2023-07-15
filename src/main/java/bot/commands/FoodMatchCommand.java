@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import util.MessageBuilder;
 
-public class FoodMatchCommand implements ICommand {
+public class FoodMatchCommand extends ICommand {
 
     private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n⌚ %count%/2 have answered",
             MATCHED_FOOD_MESSAGE = "💖 It's a match for %foodname%"+
@@ -26,6 +26,8 @@ public class FoodMatchCommand implements ICommand {
             new FoodData("Saizeriya",
                     "https://burpple-3.imgix.net/foods/1660045160_review_image1947389_original.?w=645&dpr=1&fit=crop&q=80&auto=format"),
     };
+
+
 
     @Override
     public void onCommandReceived(Update update, TelegramLongPollingBot telegramBot) {
@@ -116,7 +118,7 @@ public class FoodMatchCommand implements ICommand {
         SessionData sessionData = SessionData.findSessionByChatId(chatId);
 
 
-        if(checkIfStarted) {
+        if(checkIfStarted) { // if already started, we dont start again
 
             System.out.println(sessionData);
             if(sessionData != null && sessionData.sessionStarted) {

@@ -13,6 +13,7 @@ public class CommandFactory {
 
         private String commandPrefix;
 
+
         public String getCommandPrefix() {
             return this.commandPrefix;
         }
@@ -20,6 +21,7 @@ public class CommandFactory {
         COMMANDS(String commandPrefix) {
 
             this.commandPrefix = commandPrefix;
+
         }
     }
 
@@ -45,9 +47,14 @@ public class CommandFactory {
 
         String commandExecuted = commandPrefix;
 
+        boolean cameFromPrefix = true;
 
-        if(commandPrefix.startsWith("/")) // is a command
+
+        if(commandPrefix.startsWith("/")) { // is a command
             commandExecuted = COMMANDS.valueOf(commandPrefix.replace("/", "").toUpperCase()).getCommandPrefix();
+            cameFromPrefix = false;
+        }
+
 
 
 
@@ -60,6 +67,12 @@ public class CommandFactory {
 
         ICommand command = commandExecuted != null
                 ? commands.get(commandExecuted) : null;
+
+
+        if(cameFromPrefix) {
+            if(!command.allowPrefixReplies) // whether we should let the bot reply to prefix messages from the user.
+                return null;
+        }
 
         System.out.println(command);
 

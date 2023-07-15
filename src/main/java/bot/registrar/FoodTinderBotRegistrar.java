@@ -52,14 +52,17 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
         System.out.println("yea");
 
+
+
         if(update.getMessage() != null) {
             commandPrefix = update.getMessage().getText().split(":")[0];
         }
         else {
             commandPrefix = update.getCallbackQuery().getData().split(":")[0];
+
         }
 
-        System.out.println(commandPrefix);
+
 
         commandFactory.fetchCommand(commandPrefix).onCommandReceived(update, this);
 

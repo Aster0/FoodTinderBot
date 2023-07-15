@@ -11,9 +11,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import util.MessageBuilder;
 
-public class TestCommand implements ICommand {
+public class TestCommand extends ICommand {
 
 
+
+
+    public TestCommand() {
+        allowPrefixReplies = true;
+    }
 
     @Override
     public void onCommandReceived(Update update, TelegramLongPollingBot telegramBot) {
