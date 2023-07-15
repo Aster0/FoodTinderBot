@@ -1,5 +1,6 @@
 package bot.registrar;
 
+import bot.commands.CommandFactory;
 import bot.commands.ICommand;
 import bot.commands.FoodMatchCommand;
 import bot.data.FoodData;
@@ -21,14 +22,17 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
 
 
-    private List<ICommand> commands = new ArrayList<>();
+    // private List<ICommand> commands = new ArrayList<>();
+
+
+    private CommandFactory commandFactory;
     public FoodTinderBotRegistrar() {
 
 
 
+        commandFactory = new CommandFactory();
 
-
-        commands.add(new FoodMatchCommand());
+        //commands.add(new FoodMatchCommand());
     }
 
 
@@ -44,13 +48,28 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
 
         }
 
+        String commandPrefix;
 
+        System.out.println("yea");
 
-
-        for(ICommand command : commands) {
-
-            command.onCommandReceived(update, this);
+        if(update.getMessage() != null) {
+            commandPrefix = update.getMessage().getText().split(":")[0];
         }
+        else {
+            commandPrefix = update.getCallbackQuery().getData().split(":")[0];
+        }
+
+        System.out.println(commandPrefix);
+
+        commandFactory.fetchCommand(commandPrefix).onCommandReceived(update, this);
+
+
+
+
+//        for(ICommand command : commands) {
+//
+//            command.onCommandReceived(update, this);
+//        }
 
     }
 

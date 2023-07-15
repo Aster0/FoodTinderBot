@@ -33,7 +33,7 @@ public class FoodMatchCommand implements ICommand {
         if(update.getCallbackQuery() != null) {
 
 
-            if(update.getCallbackQuery().getData().equals("Continue")) {
+            if(update.getCallbackQuery().getData().split(":")[1].equals("Continue")) {
                 System.out.println("CONTINUE!!!");
                 generateFoodChoice(update.getCallbackQuery().getMessage().getChatId(), telegramBot, false);
 
@@ -68,7 +68,7 @@ public class FoodMatchCommand implements ICommand {
                     update.getCallbackQuery().getMessage().getMessageId(),
                     update.getCallbackQuery().getMessage().getChatId(), telegramBot, sessionData);
 
-            switch(update.getCallbackQuery().getData()) {
+            switch(update.getCallbackQuery().getData().split(":")[1]) {
                 case "Yes": {
 
                     sessionData.currentMessageAcceptedCount++;
@@ -81,6 +81,7 @@ public class FoodMatchCommand implements ICommand {
                                             sessionData.currentFoodData.getName()),
                                     "https://cdn.dribbble.com/users/485616/screenshots/6022245/heart_icon.gif",
                                     update.getCallbackQuery().getMessage().getChatId(),
+                                    "matching-start",
                                     new InlineKeyboardButton("Continue")).build());
 
 
@@ -146,7 +147,7 @@ public class FoodMatchCommand implements ICommand {
 
             try {
                 telegramBot.execute(new MessageBuilder<SendMessage>(
-                        "We have come to the end of the food list.", chatId).build());
+                        "We have come to the end of the food list.", chatId, null).build());
 
                 SessionData.deleteSession(sessionData);
             } catch (TelegramApiException e) {
@@ -161,7 +162,7 @@ public class FoodMatchCommand implements ICommand {
 
         messageBuilder = new MessageBuilder(DEFAULT_FOOD_MESSAGE.replace("%count%",
                 "0").replace("%foodname%", foodData.getName()), foodData.getThumbnail(),
-                chatId, new InlineKeyboardButton("Yes"),
+                chatId, "matching-start", new InlineKeyboardButton("Yes"),
                 new InlineKeyboardButton("No"));
 
         SendPhoto sendMessage = messageBuilder.build();

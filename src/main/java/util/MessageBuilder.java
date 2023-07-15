@@ -26,7 +26,7 @@ public class MessageBuilder<E> {
 
 
 
-    public MessageBuilder(String message, String thumbnail, long chatId, InlineKeyboardButton... buttons) {
+    public MessageBuilder(String message, String thumbnail, long chatId, String commandPrefix, InlineKeyboardButton... buttons) {
 
 
         SendPhoto sendMessage = new SendPhoto();
@@ -51,7 +51,7 @@ public class MessageBuilder<E> {
         for(InlineKeyboardButton button : buttons) {
 
             row1 = new ArrayList<>();
-            button.setCallbackData(button.getText());
+            button.setCallbackData(commandPrefix + ":" +button.getText());
 
             row1.add(button);
 
@@ -73,7 +73,7 @@ public class MessageBuilder<E> {
 
     }
 
-    public MessageBuilder(String message, long chatId, InlineKeyboardButton... buttons) {
+    public MessageBuilder(String message, long chatId, String commandPrefix, InlineKeyboardButton... buttons) {
 
 
         SendMessage sendMessage = new SendMessage();
@@ -92,7 +92,7 @@ public class MessageBuilder<E> {
         for(InlineKeyboardButton button : buttons) {
 
             row1 = new ArrayList<>();
-            button.setCallbackData(button.getText());
+            button.setCallbackData(commandPrefix + ":" +button.getText());
 
             row1.add(button);
 
