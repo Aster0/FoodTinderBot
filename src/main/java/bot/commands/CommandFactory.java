@@ -27,7 +27,7 @@ public class CommandFactory {
 
 
 
-    private Map<String, ICommand> commands = new HashMap<>();
+    private Map<String, AbstractCommand> commands = new HashMap<>();
 
     public CommandFactory() {
 
@@ -37,13 +37,13 @@ public class CommandFactory {
         registerCommand(COMMANDS.TEST.getCommandPrefix(), new TestCommand());
     }
 
-    private void registerCommand(String commandPrefix, ICommand command) {
+    private void registerCommand(String commandPrefix, AbstractCommand command) {
 
         commands.put(commandPrefix, command);
     }
 
 
-    public ICommand fetchCommand(String commandPrefix) {
+    public AbstractCommand fetchCommand(String commandPrefix, boolean cameFromCallback) {
 
         String commandExecuted = commandPrefix;
 
@@ -65,11 +65,11 @@ public class CommandFactory {
 
 
 
-        ICommand command = commandExecuted != null
+        AbstractCommand command = commandExecuted != null
                 ? commands.get(commandExecuted) : null;
 
 
-        if(cameFromPrefix) {
+        if(cameFromPrefix && !cameFromCallback) {
             if(!command.allowPrefixReplies) // whether we should let the bot reply to prefix messages from the user.
                 return null;
         }

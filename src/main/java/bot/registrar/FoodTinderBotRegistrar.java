@@ -1,19 +1,9 @@
 package bot.registrar;
 
 import bot.commands.CommandFactory;
-import bot.commands.ICommand;
-import bot.commands.FoodMatchCommand;
-import bot.data.FoodData;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import util.RedactedClass;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 @Deprecated
@@ -53,18 +43,20 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
         System.out.println("yea");
 
 
+        boolean cameFromCallback = false;
 
         if(update.getMessage() != null) {
             commandPrefix = update.getMessage().getText().split(":")[0];
         }
         else {
             commandPrefix = update.getCallbackQuery().getData().split(":")[0];
+            cameFromCallback = true;
 
         }
 
 
 
-        commandFactory.fetchCommand(commandPrefix).onCommandReceived(update, this);
+        commandFactory.fetchCommand(commandPrefix, cameFromCallback).onCommandReceived(update, this);
 
 
 
