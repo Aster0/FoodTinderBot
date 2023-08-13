@@ -29,6 +29,7 @@ public class MessageBuilder<E> {
     public MessageBuilder(String message, String thumbnail, long chatId, String commandPrefix, InlineKeyboardButton... buttons) {
 
 
+
         SendPhoto sendMessage = new SendPhoto();
         sendMessage.setChatId(chatId);
 

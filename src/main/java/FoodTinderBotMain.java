@@ -14,6 +14,8 @@ public class FoodTinderBotMain {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new FoodTinderBotRegistrar());
+
+
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

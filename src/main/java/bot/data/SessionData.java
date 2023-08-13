@@ -3,10 +3,7 @@ package bot.data;
 import com.google.inject.internal.util.Lists;
 import util.MessageBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class SessionData {
 
@@ -14,7 +11,7 @@ public class SessionData {
 
     private static List<SessionData> sessions;
 
-    private List<String> usernames = new ArrayList<>();
+    private Map<String, String> usernames = new HashMap();
 
 
 
@@ -77,7 +74,7 @@ public class SessionData {
 
     }
 
-    public List<String> getUsernames() {
+    public Map<String, String> getUsernames() {
         return usernames;
     }
 

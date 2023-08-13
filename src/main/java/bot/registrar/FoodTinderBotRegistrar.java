@@ -69,7 +69,7 @@ public class FoodTinderBotRegistrar extends TelegramLongPollingBot {
     }
 
     public String getBotUsername() {
-        return "weareindecisivebot";
+        return "food_tinder_bot";
     }
 
     @Override

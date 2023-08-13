@@ -13,10 +13,13 @@ import util.MessageBuilder;
 
 public class FoodMatchCommand extends Command {
 
-    private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n⌚ %count%/2 have answered",
+    private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n %count%/2 have answered\n📰%details%",
             MATCHED_FOOD_MESSAGE = "💖 It's a match for %foodname%"+
                     "!\n\nIf you wish to continue to explore more, " +
                     "click \"Continue\".";
+
+
+    private final int MAX_COUNT = 2;
     private Message message;
     private MessageBuilder<SendPhoto> messageBuilder;
 
@@ -24,7 +27,26 @@ public class FoodMatchCommand extends Command {
             new FoodData("Chicken Wings",
                     "https://preppykitchen.com/wp-content/uploads/2022/09/Chicken-Wings-Recipe-Card.jpg"),
             new FoodData("Saizeriya",
-                    "https://burpple-3.imgix.net/foods/1660045160_review_image1947389_original.?w=645&dpr=1&fit=crop&q=80&auto=format"),
+                    "https://burpple-3." +
+                            "imgix.net/foods/1660045160_review_image1947389_original.?w=645&dpr=1&fit=crop&q=80&auto=format"),
+            new FoodData("Ayam Penyet",
+                    "https://eatbook.sg/wp-content/uploads/2023/01/uncle-penyet-ayam-penyet-set.jpg"),
+            new FoodData("Bak Chor Mee",
+                    "https://eatbook.sg/wp-content/uploads/2022/08/10-best-bak-chor-mee-tai-hwa-pork-noodles.jpg"),
+            new FoodData("Bak Kut Teh",
+                    "https://eatbook.sg/wp-content/uploads/2020/02/Joo-Siah-Bak-Koot-Teh-Bak-Kut-Teh.jpg"),
+            new FoodData("Ban Mian",
+                    "https://eatbook.sg/wp-content/uploads/2021/02/OrganicL32-Handmade-Noodlesby-Yi-En-16.jpg"),
+            new FoodData("Carrot Cake",
+                    "https://eatbook.sg/wp-content/uploads/2023/02/chey-sua-carrot-cake-plating.jpg"),
+            new FoodData("Ramen",
+                    "https://www.foodandwine.com/thmb/" +
+                            "0AXGLeY6dYnY8sEXFqxBa8opDrs=/1500x0/filter" +
+                            "s:no_upscale():max_bytes(150000):strip_icc()/Tonkotsu-Ramen-FT-BLO" +
+                            "G1122-8fe6c12d609a4fd4ab246bea3aae140e.jpg"),
+            
+
+
     };
 
 
@@ -49,7 +71,9 @@ public class FoodMatchCommand extends Command {
             if(sessionData == null)
                 return;
 
-            if(sessionData.currentMessageCount == 2)
+
+
+            if(sessionData.currentMessageCount == MAX_COUNT) // make it so the count cant go above 2.
                 return;
 
 
@@ -58,19 +82,38 @@ public class FoodMatchCommand extends Command {
 //                return;
 
 
+            final String username = update.getCallbackQuery().getFrom().getFirstName();
+
+            if(sessionData.getUsernames().get(username) != null) // no double voting
+                return;
+
             sessionData.currentMessageCount++;
 
 
 
-            sessionData.getUsernames().add(update.getCallbackQuery().getFrom().getFirstName());
+            final String answer = update.getCallbackQuery().getData().split(":")[1];
+
+
+
+            sessionData.getUsernames().put(username, answer);
+
+            StringBuilder detailsStringBuilder = new StringBuilder();
+
+            for(String key : sessionData.getUsernames().keySet()) {
+
+                detailsStringBuilder.append(key +
+                        " has voted " + sessionData.getUsernames().get(key));
+
+            }
 
             messageBuilder.editMessage(DEFAULT_FOOD_MESSAGE.replace("%count%",
                             String.valueOf(sessionData.currentMessageCount)).replace(
-                                    "%foodname%", sessionData.currentFoodData.getName()),
+                                    "%foodname%", sessionData.currentFoodData.getName()).replace("%details%",
+                            detailsStringBuilder.toString()),
                     update.getCallbackQuery().getMessage().getMessageId(),
                     update.getCallbackQuery().getMessage().getChatId(), telegramBot, sessionData);
 
-            switch(update.getCallbackQuery().getData().split(":")[1]) {
+            switch(answer) {
                 case "Yes": {
 
                     sessionData.currentMessageAcceptedCount++;

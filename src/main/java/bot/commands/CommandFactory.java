@@ -27,7 +27,7 @@ public class CommandFactory {
 
 
 
-    private Map<String, AbstractCommand> commands = new HashMap<>();
+    private Map<String, Command> commands = new HashMap<>();
 
     public CommandFactory() {
 
@@ -37,13 +37,13 @@ public class CommandFactory {
         registerCommand(COMMANDS.TEST.getCommandPrefix(), new TestCommand());
     }
 
-    private void registerCommand(String commandPrefix, AbstractCommand command) {
+    private void registerCommand(String commandPrefix, Command command) {
 
         commands.put(commandPrefix, command);
     }
 
 
-    public AbstractCommand fetchCommand(String commandPrefix, boolean cameFromCallback) {
+    public Command fetchCommand(String commandPrefix, boolean cameFromCallback) {
 
         String commandExecuted = commandPrefix;
 
@@ -65,7 +65,10 @@ public class CommandFactory {
 
 
 
-        AbstractCommand command = commandExecuted != null
+
+
+
+        Command command = commandExecuted != null
                 ? commands.get(commandExecuted) : null;
 
 
