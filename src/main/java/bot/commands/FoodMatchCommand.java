@@ -13,7 +13,7 @@ import util.MessageBuilder;
 
 public class FoodMatchCommand extends Command {
 
-    private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n %count%/2 have answered\n📰%details%",
+    private final String DEFAULT_FOOD_MESSAGE = "😋 %foodname%\n %count%/2 have answered\n📰 %details%",
             MATCHED_FOOD_MESSAGE = "💖 It's a match for %foodname%"+
                     "!\n\nIf you wish to continue to explore more, " +
                     "click \"Continue\".";
@@ -44,7 +44,14 @@ public class FoodMatchCommand extends Command {
                             "0AXGLeY6dYnY8sEXFqxBa8opDrs=/1500x0/filter" +
                             "s:no_upscale():max_bytes(150000):strip_icc()/Tonkotsu-Ramen-FT-BLO" +
                             "G1122-8fe6c12d609a4fd4ab246bea3aae140e.jpg"),
-            
+
+            new FoodData("Char Kway Teow",
+                    "https://eatbook.sg/wp-content/uploads/2022/12/hill-street-char-kway-teow-intro.jpg"),
+            new FoodData("Chee Cheong Fun",
+                    "https://eatbook.sg/wp-content/uploads/2021/08/chef-leung-chee-cheong-fun-1.jpg"),
+            new FoodData("Chicken Rice",
+                    "https://eatbook.sg/wp-content/uploads/2015/07/Katong-Food-Delicious-boneless-chicken-rice.jpg")
+
 
 
     };
@@ -84,6 +91,7 @@ public class FoodMatchCommand extends Command {
 
             final String username = update.getCallbackQuery().getFrom().getFirstName();
 
+
             if(sessionData.getUsernames().get(username) != null) // no double voting
                 return;
 
@@ -102,7 +110,7 @@ public class FoodMatchCommand extends Command {
             for(String key : sessionData.getUsernames().keySet()) {
 
                 detailsStringBuilder.append(key +
-                        " has voted " + sessionData.getUsernames().get(key));
+                        " has voted " + sessionData.getUsernames().get(key) + ", \n");
 
             }
 
@@ -206,7 +214,8 @@ public class FoodMatchCommand extends Command {
 
 
         messageBuilder = new MessageBuilder(DEFAULT_FOOD_MESSAGE.replace("%count%",
-                "0").replace("%foodname%", foodData.getName()), foodData.getThumbnail(),
+                "0").replace("%foodname%", foodData.getName())
+                .replace("📰 %details%", ""), foodData.getThumbnail(),
                 chatId, CommandFactory.COMMANDS.START.getCommandPrefix(), new InlineKeyboardButton("Yes"),
                 new InlineKeyboardButton("No"));
 
